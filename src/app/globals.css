@@ -12,17 +12,52 @@
   --color-mint-800: #065f46;
   --color-mint-900: #064e3b;
   --color-mint-950: #022c22;
+
+  --color-saffron-50: #fff7ed;
+  --color-saffron-100: #ffedd5;
+  --color-saffron-200: #fed7aa;
+  --color-saffron-300: #fdba74;
+  --color-saffron-400: #fb923c;
+  --color-saffron-500: #f97316;
+  --color-saffron-600: #ea580c;
+  --color-saffron-700: #c2410c;
+  --color-saffron-800: #9a3412;
+  --color-saffron-900: #7c2d12;
+
+  --color-cream-50: #fdfaf2;
+  --color-cream-100: #faf3e0;
+  --color-cream-200: #f3e8c9;
+
   --font-sans: var(--font-geist-sans);
+  --font-script: var(--font-dancing-script);
 }
 
 html, body {
   height: 100%;
-  background: #f8fafc;
+  background: #fdfaf2;
   color: #0f172a;
   -webkit-font-smoothing: antialiased;
+}
+
+/* Subtle mandala motif used as a decorative watermark on hero sections.
+   Single radial paisley-style SVG, rendered very low-opacity so it reads as
+   texture rather than artwork. */
+.mandala-bg {
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'><g fill='none' stroke='%23ea580c' stroke-width='0.8' opacity='0.25'><circle cx='100' cy='100' r='90'/><circle cx='100' cy='100' r='72'/><circle cx='100' cy='100' r='54'/><circle cx='100' cy='100' r='36'/><circle cx='100' cy='100' r='18'/><g><path d='M100 10 L104 100 L100 190 L96 100 Z'/><path d='M10 100 L100 96 L190 100 L100 104 Z'/><path d='M36 36 L100 100 L164 164 L100 100 Z'/><path d='M164 36 L100 100 L36 164 L100 100 Z'/></g><g><path d='M100 28 q12 24 0 48 q-12 -24 0 -48'/><path d='M100 124 q12 24 0 48 q-12 -24 0 -48'/><path d='M28 100 q24 12 48 0 q-24 -12 -48 0'/><path d='M124 100 q24 12 48 0 q-24 -12 -48 0'/></g></g></svg>");
+  background-repeat: no-repeat;
+  background-position: center top;
+  background-size: 480px 480px;
+}
+
+/* Indian flag-inspired divider: thin saffron / mint bands */
+.tricolor-divider {
+  height: 4px;
+  background: linear-gradient(to right, #f97316 0%, #f97316 33%, #fdfaf2 33%, #fdfaf2 67%, #10b981 67%, #10b981 100%);
+  border-radius: 2px;
 }
 
 @media print {
   .no-print { display: none !important; }
   body { background: white !important; }
+  .mandala-bg { background-image: none !important; }
 }

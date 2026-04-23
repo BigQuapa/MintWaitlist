@@ -117,21 +117,22 @@ export function LiveQueue({ myEntry, initialWaiting, initialAvgWait, restaurantN
 
   return (
     <main className="mx-auto flex min-h-screen w-full max-w-md flex-col px-5 pb-10 pt-10">
-      <p className="text-sm font-semibold uppercase tracking-widest text-mint-600">
+      <p className="font-script text-3xl text-mint-600 leading-none drop-shadow-[0_1px_0_rgba(249,115,22,0.35)]">
         {restaurantName}
       </p>
-      <h1 className="mt-1 text-2xl font-semibold text-slate-900">
+      <div className="tricolor-divider mt-3 w-24" />
+      <h1 className="mt-4 text-2xl font-semibold text-slate-900">
         Hi {firstName(entry.name)} —
       </h1>
 
-      <section className="mt-6 rounded-3xl bg-gradient-to-br from-mint-500 to-mint-700 p-8 text-white shadow-lg">
+      <section className="mt-6 rounded-3xl bg-gradient-to-br from-mint-600 via-mint-500 to-saffron-500 p-8 text-white shadow-lg ring-1 ring-mint-700/20">
         <p className="text-sm font-medium opacity-90">You&apos;re party</p>
         <p className="mt-1 text-7xl font-bold tabular-nums leading-none">#{myPosition}</p>
         <div className="mt-6 flex items-baseline gap-2">
           <span className="text-3xl font-semibold tabular-nums">~{eta}</span>
           <span className="text-base opacity-90">min wait</span>
         </div>
-        <p className="mt-1 text-xs opacity-75">
+        <p className="mt-1 text-xs opacity-80">
           Estimate updates as the host seats other parties.
         </p>
       </section>
@@ -153,7 +154,7 @@ export function LiveQueue({ myEntry, initialWaiting, initialAvgWait, restaurantN
         ))}
       </Section>
 
-      <p className="mt-8 text-center text-xs text-slate-400">
+      <p className="mt-8 text-center text-xs text-slate-500">
         Keep this page open. It updates live.
       </p>
     </main>
@@ -162,8 +163,8 @@ export function LiveQueue({ myEntry, initialWaiting, initialAvgWait, restaurantN
 
 function Stat({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded-xl bg-white p-4 shadow-sm ring-1 ring-slate-100">
-      <p className="text-xs uppercase tracking-wide text-slate-500">{label}</p>
+    <div className="rounded-xl bg-white p-4 shadow-sm ring-1 ring-cream-200">
+      <p className="text-xs uppercase tracking-wide text-saffron-600">{label}</p>
       <p className="mt-1 text-xl font-semibold text-slate-900">{value}</p>
     </div>
   );
@@ -173,11 +174,11 @@ function Section({ title, empty, children }: { title: string; empty: string; chi
   const isEmpty = Array.isArray(children) && children.length === 0;
   return (
     <section className="mt-6">
-      <h2 className="mb-2 text-sm font-semibold uppercase tracking-wide text-slate-500">{title}</h2>
+      <h2 className="mb-2 text-sm font-semibold uppercase tracking-wide text-saffron-700">{title}</h2>
       {isEmpty ? (
-        <p className="rounded-xl bg-white p-4 text-sm text-slate-500 ring-1 ring-slate-100">{empty}</p>
+        <p className="rounded-xl bg-white p-4 text-sm text-slate-500 ring-1 ring-cream-200">{empty}</p>
       ) : (
-        <ul className="overflow-hidden rounded-xl bg-white ring-1 ring-slate-100">{children}</ul>
+        <ul className="overflow-hidden rounded-xl bg-white ring-1 ring-cream-200">{children}</ul>
       )}
     </section>
   );
@@ -185,9 +186,9 @@ function Section({ title, empty, children }: { title: string; empty: string; chi
 
 function Row({ pos, name, party }: { pos: number; name: string; party: number }) {
   return (
-    <li className="flex items-center justify-between border-b border-slate-100 px-4 py-3 last:border-0">
+    <li className="flex items-center justify-between border-b border-cream-100 px-4 py-3 last:border-0">
       <div className="flex items-center gap-3">
-        <span className="flex h-8 w-8 items-center justify-center rounded-full bg-slate-100 text-sm font-semibold tabular-nums text-slate-600">
+        <span className="flex h-8 w-8 items-center justify-center rounded-full bg-mint-50 text-sm font-semibold tabular-nums text-mint-700 ring-1 ring-mint-100">
           {pos}
         </span>
         <span className="font-medium text-slate-800">{name}</span>
@@ -208,9 +209,9 @@ function TerminalState({
   tone: 'success' | 'muted';
   action?: React.ReactNode;
 }) {
-  const bg = tone === 'success' ? 'from-mint-500 to-mint-700' : 'from-slate-500 to-slate-700';
+  const bg = tone === 'success' ? 'from-mint-500 via-mint-600 to-saffron-500' : 'from-slate-500 to-slate-700';
   return (
-    <main className="mx-auto flex min-h-screen w-full max-w-md flex-col items-center justify-center px-5 text-center">
+    <main className="mandala-bg mx-auto flex min-h-screen w-full max-w-md flex-col items-center justify-center px-5 text-center">
       <div className={`mb-6 flex h-24 w-24 items-center justify-center rounded-full bg-gradient-to-br ${bg} text-5xl text-white shadow-lg`}>
         {tone === 'success' ? '✓' : '·'}
       </div>

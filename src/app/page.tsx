@@ -18,15 +18,16 @@ export default async function Home() {
   const waiting = count ?? 0;
 
   return (
-    <main className="mx-auto flex min-h-screen w-full max-w-md flex-col px-5 pb-10 pt-12">
-      <header className="mb-8">
-        <p className="text-sm font-semibold uppercase tracking-widest text-mint-600">
+    <main className="mandala-bg mx-auto flex min-h-screen w-full max-w-md flex-col px-5 pb-10 pt-12">
+      <header className="mb-8 text-center">
+        <p className="text-xs font-semibold uppercase tracking-[0.3em] text-saffron-600">
           Welcome to
         </p>
-        <h1 className="mt-1 text-5xl font-bold tracking-tight text-slate-900">
+        <h1 className="mt-2 font-script text-7xl font-bold leading-none text-mint-600 drop-shadow-[0_2px_0_rgba(249,115,22,0.35)]">
           {restaurantName}
         </h1>
-        <p className="mt-3 text-base text-slate-600">
+        <div className="tricolor-divider mx-auto mt-5 w-32" />
+        <p className="mt-5 text-base text-slate-700">
           {waiting === 0
             ? 'No one is waiting right now. Add yourself below and the host will be with you shortly.'
             : `${waiting} ${waiting === 1 ? 'party is' : 'parties are'} ahead of you. Add yourself below to join the line.`}
@@ -35,7 +36,7 @@ export default async function Home() {
 
       <SignupForm />
 
-      <p className="mt-10 text-center text-xs text-slate-400">
+      <p className="mt-10 text-center text-xs text-slate-500">
         After joining you&apos;ll get a live link showing your spot in line.
       </p>
     </main>

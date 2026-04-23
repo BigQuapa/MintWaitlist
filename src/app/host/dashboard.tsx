@@ -9,6 +9,7 @@ import { signOut } from './login/actions';
 import { seatEntry, unseatEntry } from './actions/seat-entry';
 import { removeEntry } from './actions/remove-entry';
 import { updateAvgWait } from './actions/update-settings';
+import { clearAllWaiting } from './actions/clear-all';
 
 type Props = {
   initialEntries: WaitlistEntry[];
@@ -23,6 +24,7 @@ export function Dashboard({ initialEntries, initialAvgWait, restaurantName }: Pr
   const [avgWaitInput, setAvgWaitInput] = useState(String(initialAvgWait));
   const [undo, setUndo] = useState<UndoState>(null);
   const [confirmRemove, setConfirmRemove] = useState<WaitlistEntry | null>(null);
+  const [confirmClearAll, setConfirmClearAll] = useState(false);
   const [, setTick] = useState(0);
   const avgWaitTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const undoTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -103,6 +105,12 @@ export function Dashboard({ initialEntries, initialAvgWait, restaurantName }: Pr
     setConfirmRemove(null);
   }
 
+  function handleClearAllConfirmed() {
+    setEntries([]);
+    void clearAllWaiting();
+    setConfirmClearAll(false);
+  }
+
   const sorted = [...entries].sort(
     (a, b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
   );
@@ -111,22 +119,22 @@ export function Dashboard({ initialEntries, initialAvgWait, restaurantName }: Pr
     <main className="mx-auto flex min-h-screen w-full max-w-2xl flex-col px-4 pb-32 pt-6">
       <header className="flex items-center justify-between">
         <div>
-          <p className="text-xs font-semibold uppercase tracking-widest text-mint-600">
-            {restaurantName} · Host
+          <p className="font-script text-2xl text-mint-600 leading-none drop-shadow-[0_1px_0_rgba(249,115,22,0.35)]">
+            {restaurantName}
           </p>
-          <h1 className="mt-1 text-2xl font-bold text-slate-900">Waitlist</h1>
+          <h1 className="mt-1 text-2xl font-bold text-slate-900">Waitlist · Host</h1>
         </div>
         <div className="flex items-center gap-2">
           <Link
             href="/host/qr"
-            className="rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm font-medium text-slate-700 active:bg-slate-100"
+            className="rounded-lg border border-cream-200 bg-white px-3 py-2 text-sm font-medium text-slate-700 active:bg-cream-100"
           >
             QR
           </Link>
           <form action={signOut}>
             <button
               type="submit"
-              className="rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm font-medium text-slate-700 active:bg-slate-100"
+              className="rounded-lg border border-cream-200 bg-white px-3 py-2 text-sm font-medium text-slate-700 active:bg-cream-100"
             >
               Sign out
             </button>
@@ -134,7 +142,9 @@ export function Dashboard({ initialEntries, initialAvgWait, restaurantName }: Pr
         </div>
       </header>
 
-      <div className="mt-5 flex items-center gap-3 rounded-2xl bg-white p-4 ring-1 ring-slate-100">
+      <div className="tricolor-divider mt-4 w-full" />
+
+      <div className="mt-5 flex items-center gap-3 rounded-2xl bg-white p-4 ring-1 ring-cream-200">
         <label htmlFor="avgwait" className="text-sm font-medium text-slate-700">
           Avg wait
         </label>
@@ -145,17 +155,17 @@ export function Dashboard({ initialEntries, initialAvgWait, restaurantName }: Pr
           max={240}
           value={avgWaitInput}
           onChange={(e) => handleAvgWaitChange(e.target.value)}
-          className="h-12 w-20 rounded-lg border border-slate-300 bg-white px-3 text-center text-lg font-semibold text-slate-900 outline-none focus:border-mint-500 focus:ring-2 focus:ring-mint-200"
+          className="h-12 w-20 rounded-lg border border-cream-200 bg-white px-3 text-center text-lg font-semibold text-slate-900 outline-none focus:border-mint-500 focus:ring-2 focus:ring-mint-200"
         />
         <span className="text-sm text-slate-600">minutes per party</span>
-        <span className="ml-auto text-xs text-slate-400">
+        <span className="ml-auto text-xs text-saffron-700">
           {entries.length} {entries.length === 1 ? 'party' : 'parties'} waiting
         </span>
       </div>
 
       <section className="mt-5 flex flex-col gap-3">
         {sorted.length === 0 ? (
-          <div className="rounded-2xl bg-white p-8 text-center text-slate-500 ring-1 ring-slate-100">
+          <div className="rounded-2xl bg-white p-8 text-center text-slate-500 ring-1 ring-cream-200">
             <p className="text-base font-medium">No one is waiting.</p>
             <p className="mt-1 text-sm">Walk-ins will appear here as they scan the QR.</p>
           </div>
@@ -172,6 +182,18 @@ export function Dashboard({ initialEntries, initialAvgWait, restaurantName }: Pr
         )}
       </section>
 
+      {sorted.length > 0 && (
+        <div className="mt-8 flex justify-center">
+          <button
+            type="button"
+            onClick={() => setConfirmClearAll(true)}
+            className="text-xs font-medium text-slate-400 underline underline-offset-4 active:text-saffron-700"
+          >
+            Clear all waiting parties
+          </button>
+        </div>
+      )}
+
       {undo && <UndoToast undo={undo} onUndo={handleUndo} />}
       {confirmRemove && (
         <ConfirmDialog
@@ -180,6 +202,15 @@ export function Dashboard({ initialEntries, initialAvgWait, restaurantName }: Pr
           confirmLabel="Remove"
           onCancel={() => setConfirmRemove(null)}
           onConfirm={() => handleRemoveConfirmed(confirmRemove)}
+        />
+      )}
+      {confirmClearAll && (
+        <ConfirmDialog
+          title={`Clear all ${sorted.length} waiting ${sorted.length === 1 ? 'party' : 'parties'}?`}
+          message="Everyone currently waiting will see 'Your spot was released.' This cannot be undone."
+          confirmLabel="Clear all"
+          onCancel={() => setConfirmClearAll(false)}
+          onConfirm={handleClearAllConfirmed}
         />
       )}
     </main>
@@ -199,9 +230,9 @@ function EntryRow({
 }) {
   const [busy, startTransition] = useTransition();
   return (
-    <article className="flex flex-col gap-3 rounded-2xl bg-white p-4 ring-1 ring-slate-100">
+    <article className="flex flex-col gap-3 rounded-2xl bg-white p-4 ring-1 ring-cream-200">
       <div className="flex items-start gap-3">
-        <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-mint-100 text-base font-bold tabular-nums text-mint-800">
+        <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-mint-500 to-saffron-500 text-base font-bold tabular-nums text-white shadow-sm">
           {position}
         </span>
         <div className="flex-1 min-w-0">
@@ -222,7 +253,7 @@ function EntryRow({
           type="button"
           onClick={() => startTransition(onSeat)}
           disabled={busy}
-          className="flex-1 rounded-xl bg-mint-600 py-3 text-sm font-semibold text-white active:bg-mint-700 disabled:opacity-60"
+          className="flex-1 rounded-xl bg-gradient-to-r from-mint-600 to-mint-700 py-3 text-sm font-semibold text-white shadow-sm active:from-mint-700 active:to-mint-800 disabled:opacity-60"
         >
           Seat
         </button>
@@ -230,7 +261,7 @@ function EntryRow({
           type="button"
           onClick={onRemove}
           disabled={busy}
-          className="flex-1 rounded-xl border border-slate-300 bg-white py-3 text-sm font-semibold text-slate-700 active:bg-slate-100 disabled:opacity-60"
+          className="flex-1 rounded-xl border border-cream-200 bg-white py-3 text-sm font-semibold text-slate-700 active:bg-cream-100 disabled:opacity-60"
         >
           Remove
         </button>
@@ -282,7 +313,7 @@ function ConfirmDialog({
           <button
             type="button"
             onClick={onCancel}
-            className="flex-1 rounded-xl border border-slate-300 bg-white py-3 text-sm font-semibold text-slate-700 active:bg-slate-100"
+            className="flex-1 rounded-xl border border-cream-200 bg-white py-3 text-sm font-semibold text-slate-700 active:bg-cream-100"
           >
             Cancel
           </button>

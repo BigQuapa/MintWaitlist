@@ -18,7 +18,10 @@ export function SignupForm() {
   }
 
   return (
-    <form action={handleSubmit} className="flex flex-col gap-5">
+    <form
+      action={handleSubmit}
+      className="flex flex-col gap-5 rounded-3xl bg-white/85 p-6 shadow-sm ring-1 ring-cream-200 backdrop-blur-sm"
+    >
       <label className="flex flex-col gap-2">
         <span className="text-sm font-medium text-slate-700">Your name</span>
         <input
@@ -28,7 +31,7 @@ export function SignupForm() {
           autoComplete="name"
           maxLength={60}
           placeholder="Jane Doe"
-          className="h-14 rounded-xl border border-slate-300 bg-white px-4 text-lg outline-none focus:border-mint-500 focus:ring-2 focus:ring-mint-200"
+          className="h-14 rounded-xl border border-cream-200 bg-white px-4 text-lg outline-none focus:border-mint-500 focus:ring-2 focus:ring-mint-200"
         />
       </label>
 
@@ -41,7 +44,7 @@ export function SignupForm() {
           autoComplete="tel"
           inputMode="tel"
           placeholder="(555) 123-4567"
-          className="h-14 rounded-xl border border-slate-300 bg-white px-4 text-lg outline-none focus:border-mint-500 focus:ring-2 focus:ring-mint-200"
+          className="h-14 rounded-xl border border-cream-200 bg-white px-4 text-lg outline-none focus:border-mint-500 focus:ring-2 focus:ring-mint-200"
         />
         <span className="text-xs text-slate-500">
           Used by the host to reach you if needed. Not shared with other guests.
@@ -54,18 +57,18 @@ export function SignupForm() {
           <button
             type="button"
             onClick={() => setPartySize((s) => Math.max(1, s - 1))}
-            className="flex h-14 w-14 items-center justify-center rounded-xl border border-slate-300 bg-white text-2xl font-semibold text-slate-700 active:bg-slate-100"
+            className="flex h-14 w-14 items-center justify-center rounded-xl border border-cream-200 bg-white text-2xl font-semibold text-slate-700 active:bg-cream-100"
             aria-label="Decrease party size"
           >
             −
           </button>
-          <div className="flex h-14 flex-1 items-center justify-center rounded-xl bg-mint-50 text-2xl font-bold text-mint-800">
+          <div className="flex h-14 flex-1 items-center justify-center rounded-xl bg-gradient-to-r from-mint-50 via-cream-50 to-saffron-50 text-2xl font-bold text-mint-800 ring-1 ring-cream-200">
             {partySize}
           </div>
           <button
             type="button"
             onClick={() => setPartySize((s) => Math.min(20, s + 1))}
-            className="flex h-14 w-14 items-center justify-center rounded-xl border border-slate-300 bg-white text-2xl font-semibold text-slate-700 active:bg-slate-100"
+            className="flex h-14 w-14 items-center justify-center rounded-xl border border-cream-200 bg-white text-2xl font-semibold text-slate-700 active:bg-cream-100"
             aria-label="Increase party size"
           >
             +
@@ -74,7 +77,7 @@ export function SignupForm() {
       </div>
 
       {result && !result.ok && (
-        <div className="rounded-xl bg-amber-50 p-4 text-amber-900">
+        <div className="rounded-xl bg-saffron-50 p-4 text-saffron-900 ring-1 ring-saffron-200">
           <p className="font-medium">{result.error}</p>
           {result.existingToken && (
             <Link
@@ -90,7 +93,7 @@ export function SignupForm() {
       <button
         type="submit"
         disabled={pending}
-        className="mt-2 h-14 rounded-xl bg-mint-600 text-lg font-semibold text-white shadow-sm transition active:bg-mint-700 disabled:opacity-60"
+        className="mt-2 h-14 rounded-xl bg-gradient-to-r from-mint-600 to-mint-700 text-lg font-semibold text-white shadow-sm ring-1 ring-mint-700/30 transition active:from-mint-700 active:to-mint-800 disabled:opacity-60"
       >
         {pending ? 'Joining…' : 'Join the waitlist'}
       </button>
