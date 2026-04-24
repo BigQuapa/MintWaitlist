@@ -3,13 +3,18 @@
 import { redirect } from 'next/navigation';
 import { createClient } from '@/lib/supabase/server';
 import { newToken } from '@/lib/token';
+import { sendSms, joinConfirmationBody } from '@/lib/sms';
 
 export type JoinResult =
   | { ok: true; token: string }
   | { ok: false; error: string; existingToken?: string };
 
 function normalizePhone(raw: string): string {
-  return raw.replace(/[^\d+]/g, '');
+  const digits = raw.replace(/[^\d+]/g, '');
+  if (digits.startsWith('+')) return digits;
+  if (digits.length === 10) return `+1${digits}`;
+  if (digits.length === 11 && digits.startsWith('1')) return `+${digits}`;
+  return digits;
 }
 
 export async function joinWaitlist(formData: FormData): Promise<JoinResult> {
@@ -52,6 +57,9 @@ export async function joinWaitlist(formData: FormData): Promise<JoinResult> {
     }
     return { ok: false, error: 'Something went wrong. Try again.' };
   }
+
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000';
+  void sendSms(phone, joinConfirmationBody(name, `${siteUrl}/queue/${token}`));
 
   redirect(`/queue/${token}`);
 }

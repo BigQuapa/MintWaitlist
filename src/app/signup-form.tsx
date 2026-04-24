@@ -47,7 +47,7 @@ export function SignupForm() {
           className="h-14 rounded-xl border border-cream-200 bg-white px-4 text-lg outline-none focus:border-mint-500 focus:ring-2 focus:ring-mint-200"
         />
         <span className="text-xs text-slate-500">
-          Used by the host to reach you if needed. Not shared with other guests.
+          We&apos;ll text you a confirmation link and let you know when your table is ready. Not shared with other guests.
         </span>
       </label>
 
